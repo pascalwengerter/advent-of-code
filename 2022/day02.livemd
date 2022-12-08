@@ -1,0 +1,49 @@
+# AoC 2022 - Day02
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.5.0"},
+  {:nx, "~> 0.1.0"}
+])
+```
+
+## Challenge #1
+
+```elixir
+input = Kino.Input.textarea("Please paste your input file:")
+```
+
+```elixir
+defmodule Day2 do
+  def splitAndReturnIntersection(x) do
+    split_length = trunc(String.length(x) / 2)
+
+    [head | tail] =
+      String.split_at(x, split_length)
+      |> Tuple.to_list()
+
+    # Set.intersection(
+    #  Enum.into(String.split(head, "", trim: true), HashSet.new), 
+    #  Enum.into(String.split(List.first(tail), "", trim: true), HashSet.new)
+    # )
+    # |> IO.puts()
+
+    List.myers_difference([head], tail, &String.myers_difference/2)
+    |> Access.get(:diff)
+    |> Access.get(:eq)
+  end
+end
+
+input
+|> Kino.Input.read()
+|> String.splitter("\n", trim: true)
+|> Enum.map(fn x -> Day2.splitAndReturnIntersection(x) end)
+|> Enum.sort(:asc)
+|> Enum.map(fn x ->
+  cond do
+    x === String.upcase(x) -> List.first(:binary.bin_to_list(x)) - 64 + 26
+    x !== String.upcase(x) -> List.first(:binary.bin_to_list(x)) - 96
+  end
+end)
+|> Enum.reduce(fn x, acc -> x + acc end)
+```

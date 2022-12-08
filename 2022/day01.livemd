@@ -1,0 +1,48 @@
+# AoC 2022 - Day01
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.5.0"},
+  {:nx, "~> 0.1.0"}
+])
+```
+
+## Setup
+
+```elixir
+input = Kino.Input.textarea("Please paste your input file:")
+```
+
+## Module
+
+```elixir
+defmodule Day1 do
+  def splitAndSum(x) do
+    String.splitter(x, "\n", trim: true)
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.sum()
+  end
+end
+```
+
+## Challenge #1
+
+```elixir
+input
+|> Kino.Input.read()
+|> String.splitter("\n\n", trim: true)
+|> Enum.map(fn x -> Day1.splitAndSum(x) end)
+|> Enum.max()
+```
+
+## Challenge #2
+
+```elixir
+input
+|> Kino.Input.read()
+|> String.splitter("\n\n", trim: true)
+|> Enum.map(fn x -> Day1.splitAndSum(x) end)
+|> Enum.sort()
+|> Enum.take(-3)
+|> Enum.sum()
+```
